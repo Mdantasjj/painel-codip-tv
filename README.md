@@ -13,7 +13,7 @@ Para uso em uma TV dedicada, abra o endereço no Google Chrome ou Microsoft Edge
 ## Conteúdo
 
 - Indicadores consolidados de efetivo, frota, ocorrências e movimentações.
-- Mapa interativo dos 184 municípios e das 14 macrorregiões oficiais do Ceará.
+- Mapa interativo dos 184 municípios e das 14 macrorregiões oficiais do Ceará, com zoom, arraste e enquadramento automático da seleção.
 - Série mensal de ocorrências e situação operacional da frota.
 - Ticker operacional em movimento e atualização automática da página.
 

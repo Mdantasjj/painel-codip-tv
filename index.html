@@ -64,6 +64,12 @@
         <div class="map-layout">
           <div class="map-wrap">
             <svg id="cearaMap" viewBox="35 10 535 500" role="img" aria-label="Mapa interativo do Ceará dividido nas 14 macrorregiões oficiais"></svg>
+            <div class="map-zoom-controls" aria-label="Controles de navegação do mapa">
+              <button id="mapZoomIn" type="button" aria-label="Aumentar zoom" title="Aumentar zoom">+</button>
+              <button id="mapZoomOut" type="button" aria-label="Diminuir zoom" title="Diminuir zoom">−</button>
+              <button id="mapReset" type="button" aria-label="Mostrar o Ceará inteiro" title="Mostrar o Ceará inteiro">⌂</button>
+              <span id="mapZoomLevel" aria-live="polite">100%</span>
+            </div>
             <div id="mapMessage" class="map-message" hidden>Mapa indisponível</div>
             <div id="mapTooltip" class="map-tooltip" role="status" hidden></div>
           </div>

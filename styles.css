@@ -90,13 +90,20 @@ button, select, svg text { font-family: var(--font); }
 .map-auto-icon { width: 13px; text-align: center; font-size: 12px; }
 
 .map-layout { position: relative; height: 280px; display: grid; grid-template-columns: minmax(0, 1fr) 235px; padding: 0 16px 0 8px; }
-.map-wrap { position: relative; min-width: 0; overflow: hidden; }
-#cearaMap { width: 100%; height: 100%; filter: drop-shadow(0 7px 7px rgba(6,57,31,.13)); overflow: hidden; }
-#cearaMap path { stroke: rgba(255,255,255,.94); stroke-width: 1.1; vector-effect: non-scaling-stroke; cursor: pointer; transition: opacity .35s ease, filter .35s ease, transform .35s ease, stroke-width .2s ease; transform-box: fill-box; transform-origin: center; }
-#cearaMap path.dimmed { opacity: .25; }
-#cearaMap path.highlighted { filter: saturate(1.25) brightness(1.03); stroke: #fff; stroke-width: 1.8; }
-#cearaMap path:hover, #cearaMap path.hovered, #cearaMap path.municipality-selected { opacity: 1; filter: saturate(1.45) brightness(1.06) drop-shadow(0 2px 2px rgba(5,47,25,.35)); stroke: #06391f; stroke-width: 2.4; }
+.map-wrap { position: relative; min-width: 0; overflow: hidden; border-radius: 0 0 0 10px; background: radial-gradient(circle at 48% 46%, rgba(225,241,229,.72), rgba(255,255,255,0) 58%); }
+#cearaMap { width: 100%; height: 100%; touch-action: none; cursor: grab; filter: drop-shadow(0 8px 8px rgba(6,57,31,.16)); overflow: hidden; transition: filter .25s ease; }
+#cearaMap.map-view-animated { transition: filter .25s ease; }
+#cearaMap path { stroke: rgba(255,255,255,.98); stroke-width: 1.15; vector-effect: non-scaling-stroke; cursor: pointer; paint-order: stroke fill; transition: opacity .3s ease, filter .3s ease, stroke .2s ease, stroke-width .2s ease; transform-box: fill-box; transform-origin: center; }
+#cearaMap path.dimmed { opacity: .36; }
+#cearaMap path.highlighted { opacity: 1; filter: saturate(1.35) brightness(1.03); stroke: rgba(5,72,37,.65); stroke-width: 1.65; }
+#cearaMap path:hover, #cearaMap path.hovered, #cearaMap path.municipality-selected { opacity: 1; filter: saturate(1.5) brightness(1.08) drop-shadow(0 2px 2px rgba(5,47,25,.38)); stroke: #06391f; stroke-width: 3; }
+.map-wrap.is-panning #cearaMap { cursor: grabbing; }
+.map-wrap.is-panning #cearaMap path { cursor: grabbing; }
 .map-wrap.is-interactive #cearaMap { filter: drop-shadow(0 9px 9px rgba(6,57,31,.16)); }
+.map-zoom-controls { position: absolute; z-index: 5; left: 12px; top: 9px; display: grid; grid-template-columns: repeat(3, 31px) 44px; align-items: center; gap: 4px; padding: 4px; border: 1px solid #b9cbbf; border-radius: 9px; background: rgba(255,255,255,.94); box-shadow: 0 5px 16px rgba(6,57,31,.12); }
+.map-zoom-controls button { width: 31px; height: 29px; display: grid; place-items: center; padding: 0; border: 1px solid #c6d5ca; border-radius: 6px; background: #f5faf6; color: var(--green-900); font-size: 18px; line-height: 1; font-weight: 900; cursor: pointer; }
+.map-zoom-controls button:hover, .map-zoom-controls button:focus-visible { border-color: var(--green-700); background: #e6f2e9; outline: none; }
+.map-zoom-controls span { color: #52685a; font-size: 10px; font-weight: 900; text-align: center; font-variant-numeric: tabular-nums; }
 .map-message { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-weight: 800; }
 .map-message[hidden] { display: none; }
 .map-tooltip { position: absolute; z-index: 6; width: max-content; max-width: 245px; pointer-events: none; padding: 9px 11px; border: 1px solid #aac5b2; border-radius: 8px; background: rgba(5,55,29,.95); color: #fff; box-shadow: 0 8px 20px rgba(5,47,25,.22); font-size: 11px; line-height: 1.35; transform: translate(12px, -50%); }
