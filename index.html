@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f7f3">
+  <title>Painel CODIP · Visão Geral Operacional</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="tvStage" class="tv-stage" aria-label="Painel CODIP para monitoramento em TV">
+    <header class="topbar">
+      <div class="identity">
+        <div class="official-logos" aria-label="Polícia Militar do Ceará e Governo do Estado do Ceará">
+          <span class="logo-crop logo-pmce"><img src="timbrado.png" alt="Polícia Militar do Ceará"></span>
+          <span class="logo-crop logo-ceara"><img src="timbrado.png" alt="Governo do Estado do Ceará"></span>
+        </div>
+        <div>
+          <h1>PAINEL CODIP</h1>
+          <p>Visão Geral Operacional</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <span class="live-dot"></span>
+        <span>MONITORAMENTO ATIVO</span>
+        <strong id="clock">--:--:--</strong>
+        <button id="fullscreenButton" type="button" aria-label="Exibir em tela cheia" title="Exibir em tela cheia">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5m13 5h5v-5"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="kpi-grid" aria-label="Indicadores principais">
+      <article class="kpi-card">
+        <div class="kpi-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="23" cy="19" r="10"/><circle cx="44" cy="22" r="8"/><path d="M6 54V42c0-9 7-16 16-16h3c9 0 16 7 16 16v12M40 31h5c8 0 13 6 13 14v9"/></svg></div>
+        <div><span>Efetivo total</span><strong id="effectiveTotal">—</strong><small id="effectiveHint">Base de pessoal</small></div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 29l6-13h24l6 13M12 29h40c4 0 7 3 7 7v13H5V36c0-4 3-7 7-7Z"/><circle cx="17" cy="39" r="4"/><circle cx="47" cy="39" r="4"/><path d="M10 49v8h9v-8m26 0v8h9v-8M24 10h16"/></svg></div>
+        <div><span>Frota total</span><strong id="vehicleTotal">—</strong><small>Veículos cadastrados</small></div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 29l6-13h24l6 13M12 29h40c4 0 7 3 7 7v13H5V36c0-4 3-7 7-7Z"/><circle cx="17" cy="39" r="4"/><circle cx="47" cy="39" r="4"/><path d="M10 49v8h9v-8m26 0v8h9v-8"/><path d="M31 20v-6h9v6"/></svg></div>
+        <div><span>Viaturas operando</span><strong id="operatingVehicles">—</strong><small id="operatingVehicleHint">Disponibilidade da frota</small></div>
+      </article>
+      <article class="kpi-card">
+        <div class="kpi-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5c8 6 16 8 25 9v14c0 15-9 25-25 32C16 53 7 43 7 28V14c9-1 17-3 25-9Z"/><path d="m32 16 4 10 11 1-8 7 3 11-10-6-10 6 3-11-8-7 11-1 4-10Z"/></svg></div>
+        <div><span>Movimentações</span><strong id="movementTotal">—</strong><small id="movementPeriod">Período da base</small></div>
+      </article>
+    </section>
+
+    <section class="main-grid">
+      <article class="panel map-panel">
+        <div class="panel-heading">
+          <div><span class="eyebrow">Leitura territorial</span><h2>Dados por região</h2></div>
+          <div class="map-actions">
+            <button id="mapAutoButton" class="map-auto-button" type="button" aria-pressed="true" title="Pausar rotação automática">
+              <span class="map-auto-icon" aria-hidden="true">Ⅱ</span><span id="mapAutoLabel">Automático</span>
+            </button>
+            <select id="activeRegion" class="region-focus" aria-label="Selecionar macrorregião"></select>
+          </div>
+        </div>
+        <div class="map-layout">
+          <div class="map-wrap">
+            <svg id="cearaMap" viewBox="35 10 535 500" role="img" aria-label="Mapa interativo do Ceará dividido nas 14 macrorregiões oficiais"></svg>
+            <div id="mapMessage" class="map-message" hidden>Mapa indisponível</div>
+            <div id="mapTooltip" class="map-tooltip" role="status" hidden></div>
+          </div>
+          <div id="regionSummary" class="region-summary" aria-live="polite"></div>
+        </div>
+        <div id="regionLegend" class="region-legend"></div>
+      </article>
+
+      <div class="right-stack">
+        <article class="panel occurrences-panel">
+          <div class="panel-heading compact">
+            <div><span class="eyebrow">Segurança pública</span><h2>Ocorrências</h2></div>
+            <span class="period-chip" id="crimePeriod">Base atual</span>
+          </div>
+          <div class="occurrence-grid">
+            <div class="occurrence main"><span>Total</span><strong id="crimeTotal">—</strong><small id="crimeDelta">Base consolidada</small></div>
+            <div class="occurrence"><span>CVP</span><strong id="cvpTotal">—</strong><small>Crimes violentos contra o patrimônio</small></div>
+            <div class="occurrence"><span>CVLI</span><strong id="cvliTotal">—</strong><small>Crimes violentos letais intencionais</small></div>
+          </div>
+        </article>
+
+        <article class="panel ranking-panel">
+          <div class="panel-heading compact"><div><span class="eyebrow">Concentração</span><h2>Ranking regional · ocorrências</h2></div></div>
+          <div id="regionRanking" class="ranking"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="charts-grid">
+      <article class="panel chart-panel">
+        <div class="panel-heading compact">
+          <div><span class="eyebrow">Evolução mensal</span><h2>Série histórica de ocorrências</h2></div>
+          <span class="chart-total" id="trendCaption"></span>
+        </div>
+        <div id="occurrenceChart" class="chart" aria-label="Gráfico mensal de ocorrências"></div>
+      </article>
+      <article class="panel chart-panel">
+        <div class="panel-heading compact">
+          <div><span class="eyebrow">Disponibilidade operacional</span><h2>Situação atual da frota</h2></div>
+          <span class="chart-total" id="fleetBaseDate">Base consolidada</span>
+        </div>
+        <div id="vehicleChart" class="chart" aria-label="Gráfico da frota por situação operacional"></div>
+      </article>
+    </section>
+
+    <section class="ticker" aria-label="Informes operacionais">
+      <div class="ticker-label"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 21h20L12 3Zm0 6v5m0 3h.01"/></svg><strong>INFORME OPERACIONAL</strong></div>
+      <div class="ticker-window"><div id="tickerTrack" class="ticker-track"></div></div>
+    </section>
+
+    <footer>
+      <div><span class="calendar-icon">▣</span> Fonte: CODIP <i></i> Bases consolidadas do dashboard <i></i> <span id="dataQuality">Validação territorial</span></div>
+      <div>Atualização da base: <strong id="updatedAt">—</strong> <i></i> Próxima leitura em <strong id="refreshCountdown">15:00</strong></div>
+    </footer>
+  </main>
+
+  <script src="base-resumo.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
