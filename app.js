@@ -19,27 +19,32 @@
   const CRIME = BASE.crime || {};
   const number = new Intl.NumberFormat("pt-BR");
   const colors = {
-    "CARIRI": "#cbf8b8",
-    "CENTRO SUL": "#60a5fa",
-    "GRANDE FORTALEZA": "#36e600",
-    "LITORAL LESTE": "#e5b1f5",
-    "LITORAL NORTE": "#b9f5d3",
-    "LITORAL OESTE/VALE DO CURU": "#94a3b8",
-    "MACIÇO DO BATURITÉ": "#167600",
-    "SERRA DA IBIAPABA": "#a78bfa",
-    "SERTÃO CENTRAL": "#bfdbfe",
-    "SERTÃO DE CANINDÉ": "#cfcfcf",
-    "SERTÃO DE INHAMUNS": "#c7d2fe",
-    "SERTÃO DE SOBRAL": "#aaa1f2",
-    "SERTÃO DOS CRATEÚS": "#62d2e8",
-    "VALE DO JAGUARIBE": "#93c5fd"
+    "CARIRI": "#9ddf83",
+    "CENTRO SUL": "#5ca8f5",
+    "GRANDE FORTALEZA": "#36d51e",
+    "LITORAL LESTE": "#ce91e8",
+    "LITORAL NORTE": "#74d5a5",
+    "LITORAL OESTE/VALE DO CURU": "#8495a9",
+    "MACIÇO DO BATURITÉ": "#2f9345",
+    "SERRA DA IBIAPABA": "#9b79dc",
+    "SERTÃO CENTRAL": "#83bff1",
+    "SERTÃO DE CANINDÉ": "#b9c2bd",
+    "SERTÃO DE INHAMUNS": "#8e9cdd",
+    "SERTÃO DE SOBRAL": "#766dc9",
+    "SERTÃO DOS CRATEÚS": "#3ebbd3",
+    "VALE DO JAGUARIBE": "#5d9ce5"
   };
+  const MAP_HOME = { x: 35, y: 10, width: 535, height: 500 };
   const regions = Object.keys(colors);
   const initialRegion = "GRANDE FORTALEZA";
   let regionIndex = Math.max(0, regions.indexOf(initialRegion));
   let mapAutoplay = true;
   let mapPointerInside = false;
   let selectedMunicipality = "";
+  let mapView = { ...MAP_HOME };
+  let mapDrag = null;
+  let mapDragged = false;
+  let mapSuppressClickUntil = 0;
   let refreshSeconds = Math.max(1, CONFIG.refreshMinutes || 15) * 60;
 
   const byId = id => document.getElementById(id);
@@ -84,6 +89,70 @@
     if (geometry.type === "Polygon") return polygonPath(geometry.coordinates);
     if (geometry.type === "MultiPolygon") return geometry.coordinates.map(polygonPath).join("");
     return "";
+  }
+
+  function constrainMapView(view) {
+    const minWidth = MAP_HOME.width / 6;
+    const width = Math.min(MAP_HOME.width, Math.max(minWidth, view.width));
+    const height = width * MAP_HOME.height / MAP_HOME.width;
+    const x = Math.min(MAP_HOME.x + MAP_HOME.width - width, Math.max(MAP_HOME.x, view.x));
+    const y = Math.min(MAP_HOME.y + MAP_HOME.height - height, Math.max(MAP_HOME.y, view.y));
+    return { x, y, width, height };
+  }
+
+  function applyMapView(view, animated = true) {
+    mapView = constrainMapView(view);
+    const svg = byId("cearaMap");
+    svg.classList.toggle("map-view-animated", animated);
+    svg.setAttribute("viewBox", `${mapView.x.toFixed(2)} ${mapView.y.toFixed(2)} ${mapView.width.toFixed(2)} ${mapView.height.toFixed(2)}`);
+    byId("mapZoomLevel").textContent = `${Math.round(MAP_HOME.width / mapView.width * 100)}%`;
+  }
+
+  function resetMapView(animated = true) {
+    applyMapView({ ...MAP_HOME }, animated);
+  }
+
+  function zoomMap(factor, anchor) {
+    const targetWidth = mapView.width * factor;
+    const targetHeight = targetWidth * MAP_HOME.height / MAP_HOME.width;
+    const point = anchor || { x: mapView.x + mapView.width / 2, y: mapView.y + mapView.height / 2 };
+    const ratio = targetWidth / mapView.width;
+    applyMapView({
+      x: point.x - (point.x - mapView.x) * ratio,
+      y: point.y - (point.y - mapView.y) * ratio,
+      width: targetWidth,
+      height: targetHeight
+    }, false);
+  }
+
+  function fitMapToPaths(paths, minimumWidth = 115) {
+    const boxes = paths.map(path => path.getBBox()).filter(box => box.width && box.height);
+    if (!boxes.length) return;
+    const minX = Math.min(...boxes.map(box => box.x));
+    const minY = Math.min(...boxes.map(box => box.y));
+    const maxX = Math.max(...boxes.map(box => box.x + box.width));
+    const maxY = Math.max(...boxes.map(box => box.y + box.height));
+    const padding = Math.max(10, Math.min(26, Math.max(maxX - minX, maxY - minY) * .12));
+    let width = Math.max(minimumWidth, maxX - minX + padding * 2);
+    let height = maxY - minY + padding * 2;
+    const aspect = MAP_HOME.width / MAP_HOME.height;
+    if (width / height > aspect) height = width / aspect;
+    else width = height * aspect;
+    applyMapView({
+      x: (minX + maxX) / 2 - width / 2,
+      y: (minY + maxY) / 2 - height / 2,
+      width,
+      height
+    });
+  }
+
+  function focusRegion(region) {
+    fitMapToPaths(Array.from(document.querySelectorAll("#cearaMap path")).filter(path => path.dataset.region === region), 150);
+  }
+
+  function focusMunicipality(key) {
+    const path = Array.from(document.querySelectorAll("#cearaMap path")).find(node => node.dataset.key === key);
+    if (path) fitMapToPaths([path], 100);
   }
 
   function buildMapData(features) {
@@ -152,7 +221,7 @@
       const label = `${feature.municipio}, ${region}: ${fmt(item.occurrences)} ocorrências, ${fmt(item.available)} policiais disponíveis de ${fmt(item.effective)} e ${fmt(item.operating)} viaturas operando de ${fmt(item.vehicles)}`;
       return `<path d="${geometryPath(feature.geometry)}" fill="${colors[region] || "#d6dfd8"}" data-region="${escapeHtml(region)}" data-key="${escapeHtml(key)}" data-name="${escapeHtml(feature.municipio)}" role="button" tabindex="0" aria-label="${escapeHtml(label)}"><title>${escapeHtml(label)}</title></path>`;
     }).join("");
-    byId("regionLegend").innerHTML = `<span class="map-source"><strong>14 macrorregiões oficiais</strong><i></i> LC CE 154/2015 <i></i> selecione uma região ou um município</span>`;
+    byId("regionLegend").innerHTML = `<span class="map-source"><strong>14 macrorregiões oficiais</strong><i></i> LC CE 154/2015 <i></i> clique, arraste ou use o zoom</span>`;
 
     const ranked = Object.values(regional).sort((a, b) => b.occurrences - a.occurrences).slice(0, 5);
     const max = Math.max(...ranked.map(item => item.occurrences), 1);
@@ -180,6 +249,7 @@
     regionIndex = Math.max(0, regions.indexOf(selected));
     if (manual) setMapAutoplay(false);
     updateRegion(regional, selected);
+    if (manual) focusRegion(selected);
   }
 
   function showMunicipality(item, pinned = false) {
@@ -205,6 +275,7 @@
         <dt>Frota total</dt><dd>${fmt(item.vehicles)}</dd>
         <dt>Operando</dt><dd>${fmt(item.operating)}</dd>
       </dl>`;
+    if (pinned) focusMunicipality(selectedMunicipality);
   }
 
   function positionMapTooltip(event, item) {
@@ -230,14 +301,25 @@
     };
     const activatePath = path => {
       if (!path) return;
+      if (performance.now() < mapSuppressClickUntil) return;
       const item = municipalities.get(path.dataset.key);
       if (selectedMunicipality === path.dataset.key) {
         selectedMunicipality = "";
         updateRegion(regional, item.region);
+        focusRegion(item.region);
       } else showMunicipality(item, true);
     };
 
     svg.addEventListener("pointermove", event => {
+      if (mapDrag) {
+        const rect = svg.getBoundingClientRect();
+        const dx = (event.clientX - mapDrag.clientX) * mapDrag.view.width / rect.width;
+        const dy = (event.clientY - mapDrag.clientY) * mapDrag.view.height / rect.height;
+        if (Math.abs(event.clientX - mapDrag.clientX) + Math.abs(event.clientY - mapDrag.clientY) > 4) mapDragged = true;
+        applyMapView({ ...mapDrag.view, x: mapDrag.view.x - dx, y: mapDrag.view.y - dy }, false);
+        byId("mapTooltip").hidden = true;
+        return;
+      }
       const path = event.target.closest("path[data-key]");
       if (!path) return;
       const item = municipalities.get(path.dataset.key);
@@ -246,6 +328,31 @@
       positionMapTooltip(event, item);
       if (!selectedMunicipality) showMunicipality(item, false);
     });
+    svg.addEventListener("pointerdown", event => {
+      if (event.button !== 0) return;
+      mapDrag = { pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY, view: { ...mapView } };
+      mapDragged = false;
+      svg.setPointerCapture(event.pointerId);
+      wrap.classList.add("is-panning");
+    });
+    const endPan = event => {
+      if (!mapDrag || (event.pointerId !== undefined && mapDrag.pointerId !== event.pointerId)) return;
+      if (mapDragged) mapSuppressClickUntil = performance.now() + 250;
+      mapDrag = null;
+      mapDragged = false;
+      wrap.classList.remove("is-panning");
+    };
+    svg.addEventListener("pointerup", endPan);
+    svg.addEventListener("pointercancel", endPan);
+    svg.addEventListener("wheel", event => {
+      event.preventDefault();
+      const rect = svg.getBoundingClientRect();
+      const anchor = {
+        x: mapView.x + (event.clientX - rect.left) / rect.width * mapView.width,
+        y: mapView.y + (event.clientY - rect.top) / rect.height * mapView.height
+      };
+      zoomMap(event.deltaY < 0 ? .78 : 1.28, anchor);
+    }, { passive: false });
     svg.addEventListener("pointerleave", restore);
     svg.addEventListener("click", event => activatePath(event.target.closest("path[data-key]")));
     svg.addEventListener("keydown", event => {
@@ -264,8 +371,17 @@
     });
     byId("mapAutoButton").addEventListener("click", () => {
       selectedMunicipality = "";
-      setMapAutoplay(!mapAutoplay);
+      const nextState = !mapAutoplay;
+      setMapAutoplay(nextState);
       updateRegion(regional, regions[regionIndex]);
+      if (nextState) resetMapView();
+    });
+    byId("mapZoomIn").addEventListener("click", () => zoomMap(.78));
+    byId("mapZoomOut").addEventListener("click", () => zoomMap(1.28));
+    byId("mapReset").addEventListener("click", () => {
+      selectedMunicipality = "";
+      updateRegion(regional, regions[regionIndex]);
+      resetMapView();
     });
   }
 
