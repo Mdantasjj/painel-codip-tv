@@ -237,7 +237,7 @@
     const ranked = Object.values(regional).sort((a, b) => b.occurrences - a.occurrences).slice(0, 5);
     const max = Math.max(...ranked.map(item => item.occurrences), 1);
     byId("regionRanking").innerHTML = ranked.map((item, index) => `
-      <button class="rank-row" type="button" data-region="${escapeHtml(item.name)}">
+      <button class="rank-row" type="button" data-region="${escapeHtml(item.name)}" aria-label="${index + 1}º lugar: ${escapeHtml(item.name)}, ${fmt(item.occurrences)} ocorrências">
         <span class="rank-number">${index + 1}</span><span class="rank-name">${escapeHtml(item.name)}</span>
         <div class="rank-track"><div class="rank-bar" style="width:${Math.max(3, item.occurrences / max * 100)}%;background:${colors[item.name]};animation-delay:${index * 90}ms"></div></div>
         <span class="rank-value">${fmt(item.occurrences)}</span>
@@ -484,7 +484,7 @@
     byId("cvliHint").textContent = `${CRIME.cvliSource?.periodoLabel || formatPeriod(CRIME.cvliPeriodo || CRIME.periodo)} · SSPDS`;
     byId("crimePeriod").textContent = "Períodos nos cartões";
     byId("territorialPeriod").textContent = `Leitura territorial · ${territorialPeriod}`;
-    byId("rankingPeriod").textContent = `Concentração · ${territorialPeriod}`;
+    byId("rankingPeriod").textContent = `Ocorrências · ${territorialPeriod}`;
     byId("updatedAt").textContent = DATA.generatedAt || "—";
     byId("territorialUpdatedAt").textContent = territorialPeriod;
     byId("stateCrimeUpdatedAt").textContent = stateCrimePeriod;
