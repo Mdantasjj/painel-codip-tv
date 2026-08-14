@@ -94,9 +94,9 @@ button, select, svg text { font-family: var(--font); }
 .map-wrap { position: relative; min-width: 0; overflow: hidden; border-radius: 0 0 0 10px; background: radial-gradient(circle at 48% 46%, rgba(225,241,229,.72), rgba(255,255,255,0) 58%); }
 #cearaMap { width: 100%; height: 100%; touch-action: none; cursor: grab; filter: drop-shadow(0 8px 8px rgba(6,57,31,.16)); overflow: hidden; transition: filter .25s ease; }
 #cearaMap.map-view-animated { transition: filter .25s ease; }
-#cearaMap path { stroke: rgba(255,255,255,.98); stroke-width: 1.15; vector-effect: non-scaling-stroke; cursor: pointer; paint-order: stroke fill; transition: opacity .3s ease, filter .3s ease, stroke .2s ease, stroke-width .2s ease; transform-box: fill-box; transform-origin: center; }
-#cearaMap path.dimmed { opacity: .36; }
-#cearaMap path.highlighted { opacity: 1; filter: saturate(1.35) brightness(1.03); stroke: rgba(5,72,37,.65); stroke-width: 1.65; }
+#cearaMap path { stroke: rgba(31,83,49,.48); stroke-width: .9; stroke-linejoin: round; vector-effect: non-scaling-stroke; cursor: pointer; paint-order: stroke fill; transition: opacity .3s ease, filter .3s ease, stroke .2s ease, stroke-width .2s ease; transform-box: fill-box; transform-origin: center; }
+#cearaMap path.dimmed { opacity: .52; }
+#cearaMap path.highlighted { opacity: 1; filter: saturate(1.25) brightness(1.04); stroke: rgba(255,255,255,.98); stroke-width: 1.45; }
 #cearaMap path:hover, #cearaMap path.hovered, #cearaMap path.municipality-selected { opacity: 1; filter: saturate(1.5) brightness(1.08) drop-shadow(0 2px 2px rgba(5,47,25,.38)); stroke: #06391f; stroke-width: 3; }
 .map-wrap.is-panning #cearaMap { cursor: grabbing; }
 .map-wrap.is-panning #cearaMap path { cursor: grabbing; }
@@ -121,6 +121,8 @@ button, select, svg text { font-family: var(--font); }
 .map-source { display: flex; align-items: center; color: #53685b; font-size: 11px; font-weight: 800; letter-spacing: .025em; text-transform: uppercase; }
 .map-source strong { color: var(--green-800); }
 .map-source i { width: 1px; height: 14px; margin: 0 12px; background: #bccbc0; }
+.municipality-key { display: inline-flex; align-items: center; gap: 7px; color: var(--green-800); font-weight: 900; }
+.municipality-key b { width: 17px; height: 13px; display: inline-block; border: 1px solid rgba(31,83,49,.72); border-radius: 2px; background: linear-gradient(90deg, transparent 46%, rgba(31,83,49,.55) 47%, rgba(31,83,49,.55) 53%, transparent 54%), linear-gradient(transparent 46%, rgba(31,83,49,.55) 47%, rgba(31,83,49,.55) 53%, transparent 54%), #d8eadc; }
 .legend-item { min-height: 29px; display: flex; align-items: center; gap: 6px; padding: 5px 8px; border: 1px solid transparent; border-radius: 7px; background: transparent; color: #405b4b; font-size: 11px; font-weight: 900; text-transform: uppercase; cursor: pointer; }
 .legend-item i { width: 10px; height: 10px; border-radius: 3px; }
 .legend-item:hover, .legend-item:focus-visible, .legend-item.active { border-color: #bfd0c4; background: #edf5ef; outline: none; }
