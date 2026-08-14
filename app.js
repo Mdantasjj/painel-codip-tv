@@ -232,7 +232,7 @@
       const label = `${feature.municipio}, ${region}: ${fmt(item.occurrences)} ocorrências, ${fmt(item.available)} policiais disponíveis de ${fmt(item.effective)} e ${fmt(item.operating)} viaturas operando de ${fmt(item.vehicles)}`;
       return `<path d="${geometryPath(feature.geometry)}" fill="${colors[region] || "#d6dfd8"}" data-region="${escapeHtml(region)}" data-key="${escapeHtml(key)}" data-name="${escapeHtml(feature.municipio)}" role="button" tabindex="0" aria-label="${escapeHtml(label)}"><title>${escapeHtml(label)}</title></path>`;
     }).join("");
-    byId("regionLegend").innerHTML = `<span class="map-source"><strong>14 macrorregiões oficiais</strong><i></i> LC CE 154/2015 <i></i> clique, arraste ou use o zoom</span>`;
+    byId("regionLegend").innerHTML = `<span class="map-source"><strong>14 macrorregiões oficiais</strong><i></i><span class="municipality-key"><b aria-hidden="true"></b>184 municípios</span><i></i> passe o cursor ou clique</span>`;
 
     const ranked = Object.values(regional).sort((a, b) => b.occurrences - a.occurrences).slice(0, 5);
     const max = Math.max(...ranked.map(item => item.occurrences), 1);
