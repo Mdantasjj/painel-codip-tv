@@ -53,7 +53,7 @@
     <section class="main-grid">
       <article class="panel map-panel">
         <div class="panel-heading">
-          <div><span class="eyebrow">Leitura territorial</span><h2>Dados por região</h2></div>
+          <div><span class="eyebrow" id="territorialPeriod">Leitura territorial</span><h2>Dados por região</h2></div>
           <div class="map-actions">
             <button id="mapAutoButton" class="map-auto-button" type="button" aria-pressed="true" title="Pausar rotação automática">
               <span class="map-auto-icon" aria-hidden="true">Ⅱ</span><span id="mapAutoLabel">Automático</span>
@@ -83,7 +83,7 @@
           <article class="panel occurrences-panel">
             <div class="panel-heading compact">
               <div><span class="eyebrow">Segurança pública</span><h2>Ocorrências</h2></div>
-              <span class="period-chip" id="crimePeriod">Base atual</span>
+              <span class="period-chip" id="crimePeriod">Períodos nos cartões</span>
             </div>
             <div class="occurrence-grid">
               <div class="occurrence main"><span>Total</span><strong id="crimeTotal">—</strong><small id="crimeDelta">Base consolidada</small></div>
@@ -93,7 +93,7 @@
           </article>
 
           <article class="panel ranking-panel">
-            <div class="panel-heading compact"><div><span class="eyebrow">Concentração</span><h2>Ranking regional · ocorrências</h2></div></div>
+            <div class="panel-heading compact"><div><span class="eyebrow" id="rankingPeriod">Concentração</span><h2>Ranking regional · ocorrências</h2></div></div>
             <div id="regionRanking" class="ranking"></div>
           </article>
         </div>
@@ -124,7 +124,7 @@
 
     <footer>
       <div><span class="calendar-icon">▣</span> Fonte: CODIP <i></i> Bases consolidadas do dashboard <i></i> <span id="dataQuality">Validação territorial</span></div>
-      <div>Atualização da base: <strong id="updatedAt">—</strong> <i></i> Próxima leitura em <strong id="refreshCountdown">15:00</strong></div>
+      <div>Geral: <strong id="updatedAt">—</strong> <i></i> Territorial: <strong id="territorialUpdatedAt">—</strong> <i></i> CVP/CVLI: <strong id="stateCrimeUpdatedAt">—</strong> <i></i> Próxima leitura em <strong id="refreshCountdown">15:00</strong></div>
     </footer>
   </main>
 

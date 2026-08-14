@@ -70,6 +70,17 @@
     return String(row.mesLabel || row.periodo || "").slice(0, 8).toUpperCase();
   }
 
+  function formatMonthRange(period) {
+    if (!period || typeof period !== "object") return "Base atual";
+    const start = String(period.inicio || "").match(/^(\d{4})-(\d{2})/);
+    const end = String(period.fim || "").match(/^(\d{4})-(\d{2})/);
+    if (!start || !end) return formatPeriod(period);
+    const startLabel = monthNames[Number(start[2]) - 1] || start[2];
+    const endLabel = monthNames[Number(end[2]) - 1] || end[2];
+    if (start[1] === end[1]) return start[2] === end[2] ? `${startLabel}/${start[1]}` : `${startLabel}–${endLabel}/${start[1]}`;
+    return `${startLabel}/${start[1]}–${endLabel}/${end[1]}`;
+  }
+
   function fitStage() {
     const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
     byId("tvStage").style.transform = `translate(-50%, -50%) scale(${scale})`;
@@ -464,12 +475,19 @@
     byId("movementTotal").textContent = fmt(movement.total);
     byId("movementPeriod").textContent = movement.periodo || "Período da base";
     byId("crimeTotal").textContent = fmt(crimeSummary.ocorrencias);
+    const territorialPeriod = formatMonthRange(CRIME.periodo);
+    const stateCrimePeriod = CRIME.cvpSource?.periodoLabel || CRIME.cvliSource?.periodoLabel || formatMonthRange(CRIME.cvpPeriodo || CRIME.cvliPeriodo || CRIME.periodo);
+    byId("crimeDelta").textContent = `${territorialPeriod} · base detalhada`;
     byId("cvpTotal").textContent = fmt(crimeSummary.cvp);
     byId("cvpHint").textContent = `${CRIME.cvpSource?.periodoLabel || formatPeriod(CRIME.cvpPeriodo || CRIME.periodo)} · SSPDS`;
     byId("cvliTotal").textContent = fmt(crimeSummary.cvli);
     byId("cvliHint").textContent = `${CRIME.cvliSource?.periodoLabel || formatPeriod(CRIME.cvliPeriodo || CRIME.periodo)} · SSPDS`;
-    byId("crimePeriod").textContent = formatPeriod(CRIME.periodo);
+    byId("crimePeriod").textContent = "Períodos nos cartões";
+    byId("territorialPeriod").textContent = `Leitura territorial · ${territorialPeriod}`;
+    byId("rankingPeriod").textContent = `Concentração · ${territorialPeriod}`;
     byId("updatedAt").textContent = DATA.generatedAt || "—";
+    byId("territorialUpdatedAt").textContent = territorialPeriod;
+    byId("stateCrimeUpdatedAt").textContent = stateCrimePeriod;
     byId("fleetBaseDate").textContent = `Frota: ${DATA.sources.vehiclesUpdatedAt || DATA.generatedAt || "base atual"}`;
     const checksOk = DATA.validation.territorialChecks?.todosConferem === true;
     byId("dataQuality").textContent = checksOk ? "Totais territoriais conferidos" : "Revisar validação territorial";
