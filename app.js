@@ -465,7 +465,9 @@
     byId("movementPeriod").textContent = movement.periodo || "Período da base";
     byId("crimeTotal").textContent = fmt(crimeSummary.ocorrencias);
     byId("cvpTotal").textContent = fmt(crimeSummary.cvp);
+    byId("cvpHint").textContent = `${CRIME.cvpSource?.periodoLabel || formatPeriod(CRIME.cvpPeriodo || CRIME.periodo)} · SSPDS`;
     byId("cvliTotal").textContent = fmt(crimeSummary.cvli);
+    byId("cvliHint").textContent = `${CRIME.cvliSource?.periodoLabel || formatPeriod(CRIME.cvliPeriodo || CRIME.periodo)} · SSPDS`;
     byId("crimePeriod").textContent = formatPeriod(CRIME.periodo);
     byId("updatedAt").textContent = DATA.generatedAt || "—";
     byId("fleetBaseDate").textContent = `Frota: ${DATA.sources.vehiclesUpdatedAt || DATA.generatedAt || "base atual"}`;
@@ -481,6 +483,8 @@
     const messages = [
       `Efetivo disponível: ${fmt(summary.disponivel)} (${availablePct.toFixed(1).replace(".", ",")}%)`,
       `${fmt(summary.viaturasOperando)} de ${fmt(summary.viaturas)} viaturas operando (${operatingPct.toFixed(1).replace(".", ",")}%)`,
+      `CVP em 2026: ${fmt(CRIME.summary?.cvp)} ocorrências até julho · SSPDS`,
+      `CVLI em 2026: ${fmt(CRIME.summary?.cvli)} vítimas até julho · SSPDS`,
       `${fmt(movement.entradas)} entradas e ${fmt(movement.saidas)} saídas no período`,
       `Mapa validado nos 184 municípios e 14 macrorregiões oficiais`,
       `Próxima atualização automática em ${CONFIG.refreshMinutes || 15} minutos`
@@ -513,7 +517,7 @@
     const features = DATA.municipalityGeo || [];
     const mapData = buildMapData(features);
     renderMap(features, mapData.regional, mapData.municipalities);
-    renderOccurrenceChart(CRIME.byMonth || []);
+    renderOccurrenceChart(CRIME.cvliByMonth?.length ? CRIME.cvliByMonth : (CRIME.byMonth || []));
     renderVehicleChart(DATA.vehicleSituations);
     startTicker();
     setupFullscreen();

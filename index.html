@@ -78,41 +78,43 @@
         <div id="regionLegend" class="region-legend"></div>
       </article>
 
-      <div class="right-stack">
-        <article class="panel occurrences-panel">
-          <div class="panel-heading compact">
-            <div><span class="eyebrow">Segurança pública</span><h2>Ocorrências</h2></div>
-            <span class="period-chip" id="crimePeriod">Base atual</span>
-          </div>
-          <div class="occurrence-grid">
-            <div class="occurrence main"><span>Total</span><strong id="crimeTotal">—</strong><small id="crimeDelta">Base consolidada</small></div>
-            <div class="occurrence"><span>CVP</span><strong id="cvpTotal">—</strong><small>Crimes violentos contra o patrimônio</small></div>
-            <div class="occurrence"><span>CVLI</span><strong id="cvliTotal">—</strong><small>Crimes violentos letais intencionais</small></div>
-          </div>
-        </article>
+      <div class="dashboard-side">
+        <div class="right-stack">
+          <article class="panel occurrences-panel">
+            <div class="panel-heading compact">
+              <div><span class="eyebrow">Segurança pública</span><h2>Ocorrências</h2></div>
+              <span class="period-chip" id="crimePeriod">Base atual</span>
+            </div>
+            <div class="occurrence-grid">
+              <div class="occurrence main"><span>Total</span><strong id="crimeTotal">—</strong><small id="crimeDelta">Base consolidada</small></div>
+              <div class="occurrence"><span>CVP</span><strong id="cvpTotal">—</strong><small id="cvpHint">Crimes violentos contra o patrimônio</small></div>
+              <div class="occurrence"><span>CVLI</span><strong id="cvliTotal">—</strong><small id="cvliHint">Crimes violentos letais intencionais</small></div>
+            </div>
+          </article>
 
-        <article class="panel ranking-panel">
-          <div class="panel-heading compact"><div><span class="eyebrow">Concentração</span><h2>Ranking regional · ocorrências</h2></div></div>
-          <div id="regionRanking" class="ranking"></div>
-        </article>
+          <article class="panel ranking-panel">
+            <div class="panel-heading compact"><div><span class="eyebrow">Concentração</span><h2>Ranking regional · ocorrências</h2></div></div>
+            <div id="regionRanking" class="ranking"></div>
+          </article>
+        </div>
+
+        <section class="charts-grid">
+          <article class="panel chart-panel">
+            <div class="panel-heading compact">
+              <div><span class="eyebrow">Evolução mensal</span><h2>Série histórica de CVLI</h2></div>
+              <span class="chart-total" id="trendCaption"></span>
+            </div>
+            <div id="occurrenceChart" class="chart" aria-label="Gráfico mensal de ocorrências"></div>
+          </article>
+          <article class="panel chart-panel">
+            <div class="panel-heading compact">
+              <div><span class="eyebrow">Disponibilidade operacional</span><h2>Situação atual da frota</h2></div>
+              <span class="chart-total" id="fleetBaseDate">Base consolidada</span>
+            </div>
+            <div id="vehicleChart" class="chart" aria-label="Gráfico da frota por situação operacional"></div>
+          </article>
+        </section>
       </div>
-    </section>
-
-    <section class="charts-grid">
-      <article class="panel chart-panel">
-        <div class="panel-heading compact">
-          <div><span class="eyebrow">Evolução mensal</span><h2>Série histórica de ocorrências</h2></div>
-          <span class="chart-total" id="trendCaption"></span>
-        </div>
-        <div id="occurrenceChart" class="chart" aria-label="Gráfico mensal de ocorrências"></div>
-      </article>
-      <article class="panel chart-panel">
-        <div class="panel-heading compact">
-          <div><span class="eyebrow">Disponibilidade operacional</span><h2>Situação atual da frota</h2></div>
-          <span class="chart-total" id="fleetBaseDate">Base consolidada</span>
-        </div>
-        <div id="vehicleChart" class="chart" aria-label="Gráfico da frota por situação operacional"></div>
-      </article>
     </section>
 
     <section class="ticker" aria-label="Informes operacionais">
