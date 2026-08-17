@@ -14,7 +14,10 @@
     regionTotals: BASE.regionTotals || [],
     validation: BASE.validation || {},
     sources: BASE.sources || {},
-    movimentacoesEstudo: { summary: BASE.movementSummary || {} }
+    movimentacoesEstudo: {
+      summary: BASE.movementSummary || {},
+      modalities: BASE.movementModalities || []
+    }
   };
   const CRIME = BASE.crime || {};
   const number = new Intl.NumberFormat("pt-BR");
@@ -474,6 +477,17 @@
     byId("operatingVehicleHint").textContent = `${operatingPct.toFixed(1).replace(".", ",")}% da frota`;
     byId("movementTotal").textContent = fmt(movement.total);
     byId("movementPeriod").textContent = movement.periodo || "Período da base";
+    const modalityLabels = {
+      "TRANSFERÊNCIA": "TRANSFERÊNCIAS",
+      "PERMUTA": "PERMUTAS",
+      "CLASSIFICAÇÃO": "CLASSIFICAÇÕES",
+      "DISPOSIÇÃO": "DISPOSIÇÕES",
+      "REVERTIDO BSP": "REVERTIDOS BSP",
+      "CESSÃO": "CESSÕES"
+    };
+    byId("movementModalities").innerHTML = DATA.movimentacoesEstudo.modalities
+      .map(row => `<span title="${escapeHtml(row.modalidade)}"><b>${fmt(row.total)}</b>${escapeHtml(modalityLabels[row.modalidade] || row.modalidade)}</span>`)
+      .join("");
     byId("crimeTotal").textContent = fmt(crimeSummary.ocorrencias);
     const territorialPeriod = formatMonthRange(CRIME.periodo);
     const stateCrimePeriod = CRIME.cvpSource?.periodoLabel || CRIME.cvliSource?.periodoLabel || formatMonthRange(CRIME.cvpPeriodo || CRIME.cvliPeriodo || CRIME.periodo);
@@ -504,6 +518,7 @@
       `CVP em 2026: ${fmt(CRIME.summary?.cvp)} ocorrências até julho · SSPDS`,
       `CVLI em 2026: ${fmt(CRIME.summary?.cvli)} vítimas até julho · SSPDS`,
       `${fmt(movement.entradas)} entradas e ${fmt(movement.saidas)} saídas no período`,
+      `Modalidades: ${DATA.movimentacoesEstudo.modalities.map(row => `${row.modalidade} ${fmt(row.total)}`).join(" · ")}`,
       `Mapa validado nos 184 municípios e 14 macrorregiões oficiais`,
       `Próxima atualização automática em ${CONFIG.refreshMinutes || 15} minutos`
     ];
