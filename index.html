@@ -44,9 +44,13 @@
         <div class="kpi-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 29l6-13h24l6 13M12 29h40c4 0 7 3 7 7v13H5V36c0-4 3-7 7-7Z"/><circle cx="17" cy="39" r="4"/><circle cx="47" cy="39" r="4"/><path d="M10 49v8h9v-8m26 0v8h9v-8"/><path d="M31 20v-6h9v6"/></svg></div>
         <div><span>Viaturas operando</span><strong id="operatingVehicles">—</strong><small id="operatingVehicleHint">Disponibilidade da frota</small></div>
       </article>
-      <article class="kpi-card">
+      <article class="kpi-card movement-card">
         <div class="kpi-icon"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 5c8 6 16 8 25 9v14c0 15-9 25-25 32C16 53 7 43 7 28V14c9-1 17-3 25-9Z"/><path d="m32 16 4 10 11 1-8 7 3 11-10-6-10 6 3-11-8-7 11-1 4-10Z"/></svg></div>
-        <div><span>Movimentações</span><strong id="movementTotal">—</strong><small id="movementPeriod">Período da base</small></div>
+        <div class="movement-card-content">
+          <span>Movimentações</span>
+          <div class="movement-card-main"><strong id="movementTotal">—</strong><div id="movementModalities" class="movement-modalities" aria-label="Modalidades das movimentações"></div></div>
+          <small id="movementPeriod">Período da base</small>
+        </div>
       </article>
     </section>
 

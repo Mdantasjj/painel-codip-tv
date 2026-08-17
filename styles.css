@@ -70,6 +70,14 @@ button, select, svg text { font-family: var(--font); }
 .kpi-card span { display: block; color: var(--green-950); font-size: 20px; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; }
 .kpi-card strong { display: block; margin-top: 3px; color: var(--green-800); font-size: 55px; line-height: .96; font-weight: 900; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
 .kpi-card small { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.movement-card > .movement-card-content { padding: 7px 12px 6px 15px; }
+.movement-card-content > span { font-size: 18px; }
+.movement-card-main { display: grid; grid-template-columns: 82px minmax(0, 1fr); align-items: center; gap: 7px; margin-top: 2px; }
+.movement-card-main > strong { margin: 0; font-size: 42px; text-align: left; }
+.movement-modalities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 5px; }
+.movement-modalities span { min-width: 0; overflow: hidden; padding: 2px 4px; border-radius: 4px; background: #edf5ef; color: #405b4b; font-size: 8px; line-height: 1.05; letter-spacing: 0; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+.movement-modalities b { margin-right: 3px; color: var(--green-800); font-size: 11px; font-variant-numeric: tabular-nums; }
+.movement-card-content > small { margin-top: 3px; font-size: 9px; text-align: left; }
 
 .main-grid { position: relative; height: 642px; display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 14px; margin-bottom: 12px; }
 .dashboard-side { min-width: 0; display: grid; grid-template-rows: 194px 434px; gap: 14px; }
