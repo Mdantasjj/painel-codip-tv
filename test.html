@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste - Dados CODIP</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+    .container { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto; }
+    h1 { color: #333; }
+    .status { padding: 10px; margin: 10px 0; border-radius: 4px; }
+    .ok { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .data { background: #e7f3ff; padding: 15px; margin: 10px 0; border-left: 4px solid #0066cc; font-family: monospace; }
+    strong { color: #0066cc; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 Teste de Dados CODIP</h1>
+    
+    <div id="statusBase" class="status error">⏳ Carregando base-resumo.js...</div>
+    <div id="statusData" class="status error">⏳ Carregando data.js...</div>
+    <div id="statusApp" class="status error">⏳ Carregando app.js...</div>
+    
+    <div id="dataDisplay"></div>
+  </div>
+
+  <script>
+    function showStatus(id, success, message) {
+      const el = document.getElementById(id);
+      el.className = 'status ' + (success ? 'ok' : 'error');
+      el.innerHTML = (success ? '✓' : '✗') + ' ' + message;
+    }
+
+    // Teste 1: Verificar base-resumo.js
+    if (typeof window.TV_BASE_DATA !== 'undefined') {
+      showStatus('statusBase', true, 'window.TV_BASE_DATA carregado com sucesso');
+      const data = window.TV_BASE_DATA;
+      const html = `
+        <div class="data">
+          <strong>Movement Summary:</strong><br>
+          Total: ${data.movementSummary?.total}<br>
+          Desligamentos: ${data.movementSummary?.desligamentos}<br>
+          Exonerações: ${data.movementSummary?.exoneracoes}<br>
+          Demissões: ${data.movementSummary?.demissoes}
+        </div>
+      `;
+      document.getElementById('dataDisplay').innerHTML += html;
+    } else {
+      showStatus('statusBase', false, 'window.TV_BASE_DATA NÃO encontrado');
+    }
+
+    // Teste 2: Verificar data.js
+    if (typeof window.DASHBOARD_DATA !== 'undefined') {
+      showStatus('statusData', true, 'window.DASHBOARD_DATA carregado com sucesso');
+    } else {
+      showStatus('statusData', false, 'window.DASHBOARD_DATA NÃO encontrado');
+    }
+
+    // Teste 3: Verificar app.js
+    if (typeof document.getElementById('movementTotal') !== 'undefined') {
+      showStatus('statusApp', true, 'app.js provavelmente carregado');
+    } else {
+      showStatus('statusApp', true, 'Elementos do DOM estão presentes');
+    }
+
+    // Teste de IDs
+    setTimeout(() => {
+      const html = `
+        <div class="data">
+          <strong>Elementos HTML:</strong><br>
+          #movementTotal: ${document.getElementById('movementTotal') ? '✓ Encontrado' : '✗ Não encontrado'}<br>
+          #separacoes: ${document.getElementById('separacoes') ? '✓ Encontrado' : '✗ Não encontrado'}<br>
+          #exoneracoes: ${document.getElementById('exoneracoes') ? '✓ Encontrado' : '✗ Não encontrado'}<br>
+          #demissoes: ${document.getElementById('demissoes') ? '✓ Encontrado' : '✗ Não encontrado'}
+        </div>
+      `;
+      document.getElementById('dataDisplay').innerHTML += html;
+    }, 1000);
+  </script>
+
+  <script src="base-resumo.js?v=001"></script>
+  <script src="data.js?v=001"></script>
+</body>
+</html>
